@@ -2,15 +2,15 @@ package com.webapp.cardatabase;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
-import org.springframework.context.annotation.Bean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import com.webapp.cardatabase.service.UserDetailServiceImpl;
 
 /**
  * @author Roberto
@@ -51,9 +51,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	private static Logger log = LoggerFactory.getLogger(SecurityConfig.class);
 	
-	private final String USERNAME_NEW_USER = "user";
-	private final String PASSWORD_NEW_USER = "123456";
-	private final String ROLE_NEW_USER = "role";
+	@Autowired
+	private UserDetailServiceImpl userDetailServiceImpl;
+	
+	
+//	***************************************************
+// 	*  COMMENT THIS CLASS IF DISABLE IN MEMORY USER   *
+// 	***************************************************
+//	private final String USERNAME_NEW_USER = "user";
+//	private final String PASSWORD_NEW_USER = "123456";
+//	private final String ROLE_NEW_USER = "role";
 
 
 	/**
@@ -85,24 +92,47 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	 * when Spring is started, it serach the Component marked with @Bean and excude
 	 * it.
 	 */
-	// ***************************************************
-	// *  COMMENT THIS CLASS IF DISABLE IN MEMORY USER   *
-	// ***************************************************
-	@Bean
-	@Override
-	public UserDetailsService userDetailsService() {
-		log.info("userDetailsService() - START");
-		UserDetails user = org.springframework.security.core.userdetails.User
-													.withDefaultPasswordEncoder()
-														.username(USERNAME_NEW_USER).password(PASSWORD_NEW_USER).roles(ROLE_NEW_USER)
-															.build();
-	
-		log.info("userDetailsService() - DEBUG: \n\n\tuser: {\n\t\t  " + user.toString() + "\n\t\t}\n");
-		
-		InMemoryUserDetailsManager inMemoryUserDetailsManager = new InMemoryUserDetailsManager(user);
-		log.info("userDetailsService() - RETURNED: \n\n\titem: {\n\t\t  " + inMemoryUserDetailsManager.toString() + "\n\t\t}\n");
-		log.info("userDetailsService() - END");
-		return inMemoryUserDetailsManager;
-	}
+	// 		***************************************************
+	// 		*  COMMENT THIS CLASS IF DISABLE IN MEMORY USER   *
+	// 		***************************************************
+//	@Bean
+//	@Override
+//	public UserDetailsService userDetailsService() {
+//		log.info("userDetailsService() - START");
+//		UserDetails user = org.springframework.security.core.userdetails.User
+//													.withDefaultPasswordEncoder()
+//														.username(USERNAME_NEW_USER).password(PASSWORD_NEW_USER).roles(ROLE_NEW_USER)
+//															.build();
+//	
+//		log.info("userDetailsService() - DEBUG: \n\n\tuser: {\n\t\t  " + user.toString() + "\n\t\t}\n");
+//		
+//		InMemoryUserDetailsManager inMemoryUserDetailsManager = new InMemoryUserDetailsManager(user);
+//		log.info("userDetailsService() - RETURNED: \n\n\titem: {\n\t\t  " + inMemoryUserDetailsManager.toString() + "\n\t\t}\n");
+//		log.info("userDetailsService() - END");
+//		return inMemoryUserDetailsManager;
+//	}
 
+	/**
+	 * This method is need to implement if want enable user auth from my user db and not IN MEMORY USER 
+	 * 
+	 * NOTE_1: @Autowired annotation is used for inject object if type AuthenticationManagerBuilder as param in this method
+	 * */
+	@Autowired
+	public void configureGlobal(AuthenticationManagerBuilder auth) {
+		log.info("configureGlobal(AuthenticationManagerBuilder auth) - START");
+		log.info("configureGlobal(AuthenticationManagerBuilder auth) - DEBUG: \n\n\tparam: {\n\t\t  auth: " + auth.toString() + "\n\t\t}\n");
+		
+		BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+		log.info("configureGlobal(AuthenticationManagerBuilder auth) - DEBUG: \n\n\titem: {\n\t\t  BcryptPasswordEncoder: " + bCryptPasswordEncoder + "\n\t\t}\n");
+
+		try {
+			auth.userDetailsService(userDetailServiceImpl)
+						.passwordEncoder(bCryptPasswordEncoder);
+		} catch (Exception e) {
+			log.info("configureGlobal(AuthenticationManagerBuilder auth) - ERROR BCryptPasswordEncoder", e);
+			e.printStackTrace();
+		}
+		
+		log.info("configureGlobal(AuthenticationManagerBuilder auth) - END");
+	}
 }
