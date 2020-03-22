@@ -66,7 +66,7 @@ public class Car {
 		this.year = year;
 		this.price = price;	
 		this.owner = owner;
-		log.info("constructor Car(Car(String brand, String model, String color, String registerNumber, Integer year, Integer price) - DEBUG: \nstate: " +
+		log.info("constructor Car(String brand, String model, String color, String registerNumber, Integer year, Integer price) - DEBUG: \nstate: " +
 				"{\n" + 
 					"\t id: " +  		    this.id + "\n" +
 					"\t brand: " + 		    this.brand + "\n" +
