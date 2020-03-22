@@ -85,14 +85,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	 * when Spring is started, it serach the Component marked with @Bean and excude
 	 * it.
 	 */
+	// ***************************************************
+	// *  COMMENT THIS CLASS IF DISABLE IN MEMORY USER   *
+	// ***************************************************
 	@Bean
 	@Override
 	public UserDetailsService userDetailsService() {
 		log.info("userDetailsService() - START");
-		UserDetails user = User
-							.withDefaultPasswordEncoder()
-								.username(USERNAME_NEW_USER).password(PASSWORD_NEW_USER).roles(ROLE_NEW_USER)
-										.build();
+		UserDetails user = org.springframework.security.core.userdetails.User
+													.withDefaultPasswordEncoder()
+														.username(USERNAME_NEW_USER).password(PASSWORD_NEW_USER).roles(ROLE_NEW_USER)
+															.build();
 	
 		log.info("userDetailsService() - DEBUG: \n\n\tuser: {\n\t\t  " + user.toString() + "\n\t\t}\n");
 		
