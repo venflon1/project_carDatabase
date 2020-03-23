@@ -57,7 +57,7 @@ public class Car {
 
 	public Car(String brand, String model, String color, String registerNumber, Integer year, Integer price, Owner owner) {
 		super();
-		log.info("constructor Car(Car(String brand, String model, String color, String registerNumber, Integer year, Integer price) - START");
+		log.info("constructor Car(String brand, String model, String color, String registerNumber, Integer year, Integer price) - START");
 		
 		this.brand = brand;
 		this.model = model;

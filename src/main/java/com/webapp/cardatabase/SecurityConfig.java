@@ -10,7 +10,11 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import com.webapp.cardatabase.service.UserDetailServiceImpl;
+//	  ***************************************************
+//	  *  COMMENT THIS IMPORT IF DISABLE IN MEMORY USER  *
+//	  ***************************************************
+//
+// import com.webapp.cardatabase.service.UserDetailServiceImpl;
 
 /**
  * @author Roberto
@@ -51,13 +55,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	private static Logger log = LoggerFactory.getLogger(SecurityConfig.class);
 	
-	@Autowired
-	private UserDetailServiceImpl userDetailServiceImpl;
+//	  ***************************************************
+// 	  *  COMMENT THIS FIELD IF DISABLE IN MEMORY USER   *
+// 	  ***************************************************
+//
+//	@Autowired
+//	private UserDetailServiceImpl userDetailServiceImpl;
 	
 	
-//	***************************************************
-// 	*  COMMENT THIS CLASS IF DISABLE IN MEMORY USER   *
-// 	***************************************************
+//	  ***************************************************
+// 	  *  COMMENT THIS FIELD IF DISABLE IN MEMORY USER   *
+// 	  ***************************************************
+//
 //	private final String USERNAME_NEW_USER = "user";
 //	private final String PASSWORD_NEW_USER = "123456";
 //	private final String ROLE_NEW_USER = "role";
@@ -92,9 +101,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	 * when Spring is started, it serach the Component marked with @Bean and excude
 	 * it.
 	 */
-	// 		***************************************************
-	// 		*  COMMENT THIS CLASS IF DISABLE IN MEMORY USER   *
-	// 		***************************************************
+// 		***************************************************
+// 		*  COMMENT THIS CLASS IF DISABLE IN MEMORY USER   *
+// 		***************************************************
+//
 //	@Bean
 //	@Override
 //	public UserDetailsService userDetailsService() {
@@ -117,22 +127,27 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	 * 
 	 * NOTE_1: @Autowired annotation is used for inject object if type AuthenticationManagerBuilder as param in this method
 	 * */
-	@Autowired
-	public void configureGlobal(AuthenticationManagerBuilder auth) {
-		log.info("configureGlobal(AuthenticationManagerBuilder auth) - START");
-		log.info("configureGlobal(AuthenticationManagerBuilder auth) - DEBUG: \n\n\tparam: {\n\t\t  auth: " + auth.toString() + "\n\t\t}\n");
-		
-		BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-		log.info("configureGlobal(AuthenticationManagerBuilder auth) - DEBUG: \n\n\titem: {\n\t\t  BcryptPasswordEncoder: " + bCryptPasswordEncoder + "\n\t\t}\n");
-
-		try {
-			auth.userDetailsService(userDetailServiceImpl)
-						.passwordEncoder(bCryptPasswordEncoder);
-		} catch (Exception e) {
-			log.info("configureGlobal(AuthenticationManagerBuilder auth) - ERROR BCryptPasswordEncoder", e);
-			e.printStackTrace();
-		}
-		
-		log.info("configureGlobal(AuthenticationManagerBuilder auth) - END");
-	}
+//	  ***************************************************
+// 	  *  COMMENT THIS METHOD IF DISABLE IN MEMORY USER   *
+// 	  ***************************************************
+//
+//	@Autowired
+//	public void configureGlobal(AuthenticationManagerBuilder auth) {
+//		log.info("configureGlobal(AuthenticationManagerBuilder auth) - START");
+//		log.info("configureGlobal(AuthenticationManagerBuilder auth) - DEBUG: \n\n\tparam: {\n\t\t  auth: " + auth.toString() + "\n\t\t}\n");
+//		
+//		BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+//		log.info("configureGlobal(AuthenticationManagerBuilder auth) - DEBUG: \n\n\titem: {\n\t\t  BcryptPasswordEncoder: " + bCryptPasswordEncoder + "\n\t\t}\n");
+//
+//		try {
+//			auth.userDetailsService(userDetailServiceImpl)
+//						.passwordEncoder(bCryptPasswordEncoder);
+//		} catch (Exception e) {
+//			log.info("configureGlobal(AuthenticationManagerBuilder auth) - ERROR BCryptPasswordEncoder", e);
+//			e.printStackTrace();
+//		}
+//		
+//		log.info("configureGlobal(AuthenticationManagerBuilder auth) - END");
+//	}
+	
 }
