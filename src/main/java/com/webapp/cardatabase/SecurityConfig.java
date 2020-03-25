@@ -4,16 +4,21 @@ import java.util.Arrays;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import com.webapp.cardatabase.service.UserDetailServiceImpl;
 
 //	  ***************************************************
 //	  *  COMMENT THIS IMPORT IF DISABLE IN MEMORY USER  *
@@ -60,12 +65,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	private static Logger log = LoggerFactory.getLogger(SecurityConfig.class);
 	
-//	  ***************************************************
-// 	  *  COMMENT THIS FIELD IF DISABLE IN MEMORY USER   *
-// 	  ***************************************************
-//
-//	@Autowired
-//	private UserDetailServiceImpl userDetailServiceImpl;
+
+	@Autowired
+	private UserDetailServiceImpl userDetailServiceImpl;
 	
 	
 //	  ***************************************************
@@ -85,12 +87,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		log.info("configure(HttpSecurity http) - START");
-		log.info("configure(HttpSecurity http) - DEBUG: \n\n\tparam: {\n\t\t  http: " + http.toString() + "\n\t\t}\n");
+		log.info("configure(HttpSecurity http) - DEBUG: \n\n\titem: {\n\t\t  http: " + http.toString() + "\n\t\t}\n");
 
 		LoginFilter loginFilter = new LoginFilter("/login", authenticationManager());
-		log.info("configure(HttpSecurity http) - DEBUG: \n\n\tparam: {\n\t\t  loginFilter: " + loginFilter.toString() + "\n\t\t}\n");
+		log.info("configure(HttpSecurity http) - DEBUG: \n\n\titem: {\n\t\t  loginFilter: " + loginFilter.toString() + "\n\t\t}\n");
 
-		HttpSecurity httpSecurity = http.cors().and().authorizeRequests()
+		HttpSecurity httpSecurity =  http.csrf().disable().cors().and().authorizeRequests()
 								             .antMatchers(HttpMethod.POST, "/login").permitAll()
 																				.anyRequest().authenticated()
 																											.and()
@@ -98,7 +100,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 																															// Filter for other requests to check JWT in header
 																															.addFilterBefore(new AuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
-		log.info("configure(HttpSecurity http) - DEBUG: \n\n\tparam: {\n\t\t  httpSecurity: " + httpSecurity.toString() + "\n\t\t}\n");
+		log.info("configure(HttpSecurity http) - DEBUG: \n\n\titem: {\n\t\t  httpSecurity: " + httpSecurity.toString() + "\n\t\t}\n");
 		log.info("configure(HttpSecurity http) - END");
 	}
 
@@ -195,5 +197,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //		
 //		log.info("configureGlobal(AuthenticationManagerBuilder auth) - END");
 //	}
+	
+	@Autowired
+	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+		auth.userDetailsService(this.userDetailServiceImpl).passwordEncoder(new BCryptPasswordEncoder());
+	}
 	
 }

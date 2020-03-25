@@ -15,8 +15,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.security.web.util.matcher.RequestMatcher;
-import org.springframework.util.AntPathMatcher;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webapp.cardatabase.domain.AccountCredentials;
@@ -75,15 +73,15 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 		// in Java Object of type AccountCredentials (that is my custom pojo that i had create before)
 		AccountCredentials credentials = new ObjectMapper()
 												.readValue(request.getInputStream(), AccountCredentials.class);
-		log.info("attemptAuthentication(HttpServletRequest request, HttpServletResponse response) - DEBUG:");
-		log.info("");
+		log.info("attemptAuthentication(HttpServletRequest request, HttpServletResponse response) - DEBUG: \n\n\titem: {\n\t\t  credentials: " + "username =" + credentials.getUsername() + ", password =" + credentials.getPassword() + "\n\t\t}\n");
+
 		
 		// UsernamePasswordAuthenticationToken is a class of SPring that manage Authentication Username and Password that are need for authentication
 		// create an object of type UsernamePasswordAuthenticationToken passing the username, password and Role of my pojo AccountCredntials
 		UsernamePasswordAuthenticationToken usernameAndPasswordAuthToken = new UsernamePasswordAuthenticationToken( credentials.getUsername(), 
 																												    credentials.getPassword(),																												    
 																												    Collections.emptyList() );
-		log.info("attemptAuthentication(HttpServletRequest request, HttpServletResponse response) - DEBUG:");
+		log.info("attemptAuthentication(HttpServletRequest request, HttpServletResponse response) - DEBUG: \n\n\titem: {\n\t\t  usernameAndPasswordAuthToken: " + usernameAndPasswordAuthToken.toString() + "\n\t\t}\n");
 		
 		// finally Authentication object is built 
 		Authentication auth = this.getAuthenticationManager()

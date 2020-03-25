@@ -38,13 +38,13 @@ public class AuthenticationService {
 	 * */
 	 public static void addToken(HttpServletResponse response, String username) {
 		 log.info("addToken(HttpServletResponse response, String username) - START");
-		 log.info("addToken(HttpServletResponse response, String username) - DEBUG: \n\n");
-		 log.info("\tparams: [");
-		 	log.info("\n\t\tparam_1: {\n\t\t  response-status: "  +      response.getStatus()  + "\n}\n");
-		 	log.info("\n\t\tparam_1: {\n\t\t  response-headers-name: " + response.getHeaderNames() + "\n}\n");
-		 	log.info("\n\t\tparam_1: {\n\t\t  response: " + response.toString() + "\n}\n");
-		 	log.info("\n\t\tparam_2: {\n\t\t  username: " + username + "\n}\n");
-		 log.info("\t  ]");
+		 log.info("addToken(HttpServletResponse response, String username) - DEBUG: \n\n" + 
+	 		"\n\tparameters: [" +
+			 	"\n\n\t\tparam_1: {\n\t\t  response-status: "  +      response.getStatus()  + "\n\t}\n" + 
+			 	"\n\t\tparam_1: {\n\t\t  response-headers-name: " + response.getHeaderNames() + "\n\t}\n" + 
+			 	"\n\n\t\tparam_1: {\n\t\t  response: " + response.toString() + "\n	t}\n" +
+			 	"\n\n\t\tparam_2: {\n\t\t  username: " + username + "\n	t}\n" +
+			"\n\t  ]");
 		 	
 		 Date exipireDate = new Date(System.currentTimeMillis() + EXPIRATIONTIME);
 		 
@@ -73,10 +73,10 @@ public class AuthenticationService {
 	 public static Authentication getAuthentication(HttpServletRequest request) {
 		 log.info("addToken(HttpServletRequest request) - START");
 		 log.info("addToken(HttpServletRequest request) - DEBUG: \n\n");
-		 log.info("\tparam: [");
-		 	log.info("\n\t\tparam_1: {\n\t\t  request-header-Authorization: "  +      request.getHeader("Authoriaztion")  + "\n}\n");
-		 	log.info("\n\t\tparam_1: {\n\t\t  request-header-Access-Control-Expose-Headers: "  +      request.getHeader("Access-Control-Expose-Headers")  + "\n}\n");
-		 log.info("\t  ]");
+		 log.info("\tparam: [" +
+		 	"\n\n\t\tparam_1: {\n\t\t  request-header-Authorization: "  +  request.getHeader("Authoriaztion")  + "\n}\n" +
+		 	"\n\n\t\tparam_1: {\n\t\t  request-header-Access-Control-Expose-Headers: "  +      request.getHeader("Access-Control-Expose-Headers")  + "\n}\n" +
+		 "\n\t  ]");
 		 
 		 String token = request.getHeader("Authorization");
 		 log.info("getAuthentication(HttpServletRequest request) - DEBUG: \n\n\titem: {\n\t\t jwt: " + token + "\n}\n");
