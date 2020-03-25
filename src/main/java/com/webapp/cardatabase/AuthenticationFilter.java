@@ -25,6 +25,11 @@ import com.webapp.cardatabase.service.AuthenticationService;
  * */
 public class AuthenticationFilter extends GenericFilter{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4911068842991139762L;
+	
 	private static Logger log = Logger.getLogger(AuthenticationFilter.class);
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain)
@@ -34,9 +39,11 @@ public class AuthenticationFilter extends GenericFilter{
 		// AuthenticationServise is a class create before in package com.webapp.cardatabase.service
 		// use a static method getAuthentication of class AuthenticationService
 		Authentication auth = AuthenticationService.getAuthentication((HttpServletRequest)request);
+		log.info("userDetailsService() - DEBUG: \n\n\tuser: {\n\t\tauth"+ auth.toString() + "\n\t\t}\n");
 		
 		SecurityContextHolder.getContext().setAuthentication(auth);
-		
+		log.info("userDetailsService() - DEBUG: \n\n\tuser: {\n\t\tauth"+ auth.toString() + "\n\t\t}\n");
+
 		filterChain.doFilter(request, response);
 		log.info("doFilter(ServletRequest request, ServletResponse response, FilterChain chain) - END");
 	}
