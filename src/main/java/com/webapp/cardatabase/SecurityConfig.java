@@ -179,28 +179,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 // 	  *  COMMENT THIS METHOD IF DISABLE IN MEMORY USER   *
 // 	  ***************************************************
 //
-//	@Autowired
-//	public void configureGlobal(AuthenticationManagerBuilder auth) {
-//		log.info("configureGlobal(AuthenticationManagerBuilder auth) - START");
-//		log.info("configureGlobal(AuthenticationManagerBuilder auth) - DEBUG: \n\n\tparam: {\n\t\t  auth: " + auth.toString() + "\n\t\t}\n");
-//		
-//		BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-//		log.info("configureGlobal(AuthenticationManagerBuilder auth) - DEBUG: \n\n\titem: {\n\t\t  BcryptPasswordEncoder: " + bCryptPasswordEncoder + "\n\t\t}\n");
-//
-//		try {
-//			auth.userDetailsService(userDetailServiceImpl)
-//						.passwordEncoder(bCryptPasswordEncoder);
-//		} catch (Exception e) {
-//			log.info("configureGlobal(AuthenticationManagerBuilder auth) - ERROR BCryptPasswordEncoder", e);
-//			e.printStackTrace();
-//		}
-//		
-//		log.info("configureGlobal(AuthenticationManagerBuilder auth) - END");
-//	}
-	
 	@Autowired
-	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(this.userDetailServiceImpl).passwordEncoder(new BCryptPasswordEncoder());
+	public void configureGlobal(AuthenticationManagerBuilder auth) {
+		log.info("configureGlobal(AuthenticationManagerBuilder auth) - START");
+		log.info("configureGlobal(AuthenticationManagerBuilder auth) - DEBUG: \n\n\tparam: {\n\t\t  auth: " + auth.toString() + "\n\t\t}\n");
+		
+		BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+		log.info("configureGlobal(AuthenticationManagerBuilder auth) - DEBUG: \n\n\titem: {\n\t\t  BcryptPasswordEncoder: " + bCryptPasswordEncoder + "\n\t\t}\n");
+
+		try {
+			auth.userDetailsService(userDetailServiceImpl)
+						.passwordEncoder(bCryptPasswordEncoder);
+		} catch (Exception e) {
+			log.info("configureGlobal(AuthenticationManagerBuilder auth) - ERROR BCryptPasswordEncoder", e);
+			e.printStackTrace();
+		}
+		
+		log.info("configureGlobal(AuthenticationManagerBuilder auth) - END");
 	}
+
+
 	
 }
